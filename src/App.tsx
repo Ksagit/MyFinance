@@ -1,6 +1,8 @@
+// src/App.tsx
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { PWABadge } from "./PWABadge";
+import { useToast } from "./components/ToastContainer";
 import { Budget, Transaction } from "./utils/types";
 import { Dashboard } from "./components/Dashboard";
 import { TransactionForm } from "./components/TransactionForm";
@@ -18,8 +20,7 @@ export default function App() {
     return savedBudgets ? JSON.parse(savedBudgets) : [];
   });
 
-  const [notificationPermission, setNotificationPermission] =
-    useState<NotificationPermission>(Notification.permission);
+  const { addToast } = useToast();
 
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -29,38 +30,20 @@ export default function App() {
     localStorage.setItem("budgets", JSON.stringify(budgets));
   }, [budgets]);
 
-  useEffect(() => {
-    if (Notification.permission === "default") {
-      Notification.requestPermission().then((permission) => {
-        setNotificationPermission(permission);
-      });
-    }
-  }, []);
-
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prevTransactions) => [
       { ...transaction, id: crypto.randomUUID() },
       ...prevTransactions,
     ]);
-    showTransactionNotification(transaction);
-  };
-
-  const showTransactionNotification = (transaction: Transaction) => {
-    if (notificationPermission === "granted") {
-      const title =
-        transaction.type === "income" ? "Nowy Przychód!" : "Nowy Wydatek!";
-      const body = `${transaction.category}: ${transaction.amount.toFixed(
-        2
-      )} PLN (${transaction.description || "Brak opisu"})`;
-
-      new Notification(title, {
-        body: body,
-        icon: "/favicon.svg",
-        dir: "auto",
-      });
-    } else {
-      console.warn("Brak uprawnień do wyświetlania powiadomień.");
-    }
+    const message =
+      transaction.type === "income" ? "Przychód dodany!" : "Wydatek dodany!";
+    const type = transaction.type === "income" ? "success" : "info";
+    addToast(
+      `${message} ${transaction.amount.toFixed(2)} PLN w kategorii ${
+        transaction.category
+      }.`,
+      type
+    );
   };
 
   const saveBudget = (newOrUpdatedBudget: Budget) => {
@@ -76,12 +59,17 @@ export default function App() {
         return [...prevBudgets, newOrUpdatedBudget];
       }
     });
+    addToast(
+      `Budżet dla "${newOrUpdatedBudget.category}" zapisany!`,
+      "success"
+    );
   };
 
   const deleteBudget = (id: string) => {
     setBudgets((prevBudgets) =>
       prevBudgets.filter((budget) => budget.id !== id)
     );
+    addToast("Budżet usunięty.", "info");
   };
 
   const calculateBalance = () => {
