@@ -1,10 +1,13 @@
 import { useMemo } from "react";
-import { Transaction } from "../utils/types";
+import { Link } from "react-router-dom"; // Dodajemy Link do linkowania do budżetów
+import { Budget, Transaction } from "../utils/types";
 
 export const Dashboard = ({
   transactions,
+  budgets,
 }: {
   transactions: Transaction[];
+  budgets: Budget[];
 }) => {
   const { totalIncome, totalExpense, balance } = useMemo(() => {
     const income = transactions
@@ -30,6 +33,25 @@ export const Dashboard = ({
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3);
   }, [transactions]);
+
+  const currentMonth = new Date().toISOString().slice(0, 7);
+  const activeBudgets = useMemo(() => {
+    return budgets
+      .map((budget) => {
+        const spent = transactions
+          .filter(
+            (t) =>
+              t.type === "expense" &&
+              t.category === budget.category &&
+              t.date.startsWith(budget.month)
+          )
+          .reduce((sum, t) => sum + t.amount, 0);
+        const remaining = budget.limit - spent;
+        const percentage = (spent / budget.limit) * 100;
+        return { ...budget, spent, remaining, percentage };
+      })
+      .filter((b) => b.month === currentMonth || b.remaining < 0);
+  }, [budgets, transactions, currentMonth]);
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-xl max-w-3xl mx-auto text-gray-800 space-y-6">
@@ -90,10 +112,56 @@ export const Dashboard = ({
           )}
         </div>
       )}
+      {activeBudgets.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4">
+            Aktywne Budżety ({currentMonth})
+          </h3>
+          <ul className="space-y-2">
+            {activeBudgets.map((budget) => (
+              <li
+                key={budget.id}
+                className="flex flex-col sm:flex-row justify-between items-center bg-gray-50 p-3 rounded-md"
+              >
+                <div className="flex-1 text-sm sm:mr-4">
+                  <span className="font-medium">{budget.category}:</span> Limit{" "}
+                  {budget.limit.toFixed(2)} PLN
+                </div>
+                <div className="w-full sm:w-1/2 bg-gray-200 rounded-full h-2.5 mt-1 sm:mt-0">
+                  <div
+                    className="h-2.5 rounded-full"
+                    style={{
+                      width: `${Math.min(100, budget.percentage)}%`,
+                      backgroundColor:
+                        budget.percentage > 100 ? "red" : "green",
+                    }}
+                  ></div>
+                </div>
+                <span
+                  className={`text-sm font-semibold ml-2 ${
+                    budget.remaining >= 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {budget.spent.toFixed(2)} / {budget.limit.toFixed(2)} PLN
+                </span>
+                <Link
+                  to="/budgets"
+                  className="ml-2 text-blue-600 hover:underline text-sm"
+                >
+                  Szczegóły
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-      {transactions.length === 0 && (
+      {transactions.length === 0 && budgets.length === 0 && (
         <div className="mt-8 text-center text-gray-600">
-          <p>Dodaj swoje pierwsze transakcje, aby zobaczyć podsumowanie!</p>
+          <p>
+            Dodaj swoje pierwsze transakcje lub budżety, aby zobaczyć
+            podsumowanie!
+          </p>
         </div>
       )}
     </div>

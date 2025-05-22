@@ -6,3 +6,10 @@ export interface Transaction {
   date: string;
   description: string;
 }
+
+export interface Budget {
+  id: string;
+  category: string;
+  limit: number;
+  month: string;
+}
