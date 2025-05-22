@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      includeAssets: ["favicon.svg"],
       registerType: "autoUpdate",
       injectRegister: false,
       pwaAssets: {
@@ -15,10 +16,34 @@ export default defineConfig({
         config: true,
       },
       manifest: {
-        name: "my_finance",
-        short_name: "my_finance",
+        name: "My Finance",
+        short_name: "MyFinance",
         description: "A PWA for your financial needs",
         theme_color: "#ffffff",
+        icons: [
+          {
+            src: "pwa-64x64.png",
+            sizes: "64x64",
+            type: "image/png",
+          },
+          {
+            src: "pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "maskable-icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
