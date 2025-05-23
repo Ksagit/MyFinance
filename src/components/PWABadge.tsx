@@ -1,5 +1,5 @@
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { useToast } from "./components/ToastContainer";
+import { useToast } from "./ToastContainer";
 
 function registerPeriodicSync(
   period: number,

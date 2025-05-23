@@ -1,7 +1,7 @@
 // src/App.tsx
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { PWABadge } from "./PWABadge";
+import { PWABadge } from "./components/PWABadge";
 import { useToast } from "./components/ToastContainer";
 import { Budget, Transaction } from "./utils/types";
 import { Dashboard } from "./components/Dashboard";
