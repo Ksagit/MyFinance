@@ -1,8 +1,6 @@
-// src/App.tsx
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
 import { useToast } from "./components/ToastContainer";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"; // Importuj
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dashboard } from "./components/Dashboard";
 import { PWABadge } from "./components/PWABadge";
 import { BudgetsPage } from "./pages/BudgetsPage";
@@ -10,7 +8,7 @@ import { Transaction, Budget } from "./utils/types";
 import { TransactionList } from "./components/TransactionList";
 import { TransactionForm } from "./components/TransactionForm";
 
-const API_URL = "http://localhost:5001/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function App() {
   const { addToast } = useToast();
