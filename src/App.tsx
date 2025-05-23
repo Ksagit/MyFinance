@@ -84,7 +84,7 @@ export default function App() {
 
   return (
     <Router>
-      <div className="h-screen w-screen flex flex-col items-center justify-start p-8 bg-gray-900 text-white font-sans overflow-auto">
+      <div className="h-screen w-screen flex flex-col items-center justify-start p-8 bg-gray-900 text-white font-sans overflow-auto antialiased">
         <nav className="w-full max-w-4xl bg-gray-800 p-4 rounded-lg shadow-lg mb-8">
           <ul className="flex justify-around text-lg font-semibold">
             <li>
