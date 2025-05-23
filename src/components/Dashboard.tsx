@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom"; // Dodajemy Link do linkowania do budżetów
+import { Link } from "react-router-dom";
 import { Budget, Transaction } from "../utils/types";
 
 export const Dashboard = ({
