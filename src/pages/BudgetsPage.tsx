@@ -1,7 +1,7 @@
 import { Routes, Route, useParams } from "react-router-dom";
-import { BudgetList } from "../components/BudgetList";
 import { BudgetForm } from "../components/BudgetForm";
 import { Budget, Transaction } from "../utils/types";
+import { BudgetList } from "../components/BudgetList";
 
 export const BudgetsPage = ({
   budgets,
@@ -15,7 +15,7 @@ export const BudgetsPage = ({
   onDeleteBudget: (id: string) => void;
 }) => {
   const { id } = useParams();
-  const existingBudget = id ? budgets.find((b) => b.id === id) : undefined;
+  const existingBudget = id ? budgets.find((b) => b._id === id) : undefined;
 
   return (
     <div className="w-full max-w-4xl">

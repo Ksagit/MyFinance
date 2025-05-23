@@ -1,5 +1,4 @@
-// src/components/ToastContainer.tsx
-import React, {
+import {
   useState,
   useEffect,
   useCallback,
@@ -37,9 +36,7 @@ export const useToast = () => {
   return context;
 };
 
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = useCallback(
@@ -128,7 +125,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
           {toast.buttonText}
         </button>
       ) : null}
-      {!toast.buttonText || !toast.onActionButtonClick ? ( // Tylko jeśli nie ma przycisku akcji, pokaż X
+      {!toast.buttonText || !toast.onActionButtonClick ? (
         <button
           onClick={() => {
             setIsVisible(false);

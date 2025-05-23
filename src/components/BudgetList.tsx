@@ -54,7 +54,7 @@ export const BudgetList = ({
 
           return (
             <div
-              key={budget.id}
+              key={budget._id}
               className="bg-gray-50 p-4 rounded-lg shadow flex flex-col sm:flex-row justify-between items-center"
             >
               <div className="flex-1 mb-2 sm:mb-0 sm:mr-4">
@@ -89,13 +89,13 @@ export const BudgetList = ({
               </div>
               <div className="flex space-x-2">
                 <Link
-                  to={`edit/${budget.id}`}
+                  to={`edit/${budget._id}`}
                   className="py-1 px-3 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 text-sm"
                 >
                   Edytuj
                 </Link>
                 <button
-                  onClick={() => onDeleteBudget(budget.id)}
+                  onClick={() => onDeleteBudget(budget._id as string)}
                   className="py-1 px-3 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
                 >
                   Usuń

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Budget } from "../utils/types";
 
@@ -31,14 +31,15 @@ export const BudgetForm = ({
       return;
     }
 
-    const newBudget: Budget = {
-      id: existingBudget?.id || crypto.randomUUID(),
+    // Jeśli istniejący budżet, to użyj jego _id, inaczej pozostaw undefined
+    const budgetToSave: Budget = {
+      _id: existingBudget?._id, // To _id będzie tylko dla aktualizacji PUT
       category: category.trim(),
       limit: parseFloat(limit.toFixed(2)),
       month,
-    };
+    } as Budget; // Typowanie do Budget
 
-    onSaveBudget(newBudget);
+    onSaveBudget(budgetToSave);
     navigate("/budgets");
   };
 

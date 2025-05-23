@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Transaction } from "../utils/types";
 
 export const TransactionForm = ({
   onAddTransaction,
 }: {
-  onAddTransaction: (tranasction: Transaction) => void;
+  onAddTransaction: (
+    transaction: Omit<Transaction, "_id" | "createdAt">
+  ) => void;
 }) => {
   const [type, setType] = useState<"income" | "expense">("expense");
   const [category, setCategory] = useState<string>("");
@@ -21,8 +23,7 @@ export const TransactionForm = ({
       return;
     }
 
-    const newTransaction: Transaction = {
-      id: "",
+    const newTransaction = {
       type,
       category: category.trim(),
       amount: parseFloat(amount.toFixed(2)),

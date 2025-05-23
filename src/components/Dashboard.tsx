@@ -120,7 +120,7 @@ export const Dashboard = ({
           <ul className="space-y-2">
             {activeBudgets.map((budget) => (
               <li
-                key={budget.id}
+                key={budget._id}
                 className="flex flex-col sm:flex-row justify-between items-center bg-gray-50 p-3 rounded-md"
               >
                 <div className="flex-1 text-sm sm:mr-4">

@@ -14,9 +14,15 @@ export const TransactionList = ({
     );
   }
 
-  const sortedTransactions = [...transactions].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const sortedTransactions = [...transactions].sort((a, b) => {
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
+    if (dateA !== dateB) return dateB - dateA;
+    if (a.createdAt && b.createdAt) {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+    return 0;
+  });
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-xl max-w-3xl mx-auto text-gray-800">
@@ -44,7 +50,7 @@ export const TransactionList = ({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedTransactions.map((transaction) => (
-              <tr key={transaction.id} className="hover:bg-gray-50">
+              <tr key={transaction._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {transaction.date}
                 </td>
