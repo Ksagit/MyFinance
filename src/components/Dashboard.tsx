@@ -29,15 +29,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
     localStorage.setItem("userEmail", userEmail);
   }, [userEmail]);
 
-  // Funkcja do pokazywania alertu (możesz użyć `useToast` tutaj, ale prosiłeś o `alert`)
-  const showAlertWithUserData = () => {
-    if (userName && userEmail) {
-      alert(`Dane użytkownika:\nImię: ${userName}\nEmail: ${userEmail}`);
-    } else {
-      alert("Proszę najpierw uzupełnić dane użytkownika w formularzu!");
-    }
-  };
-
   const { totalIncome, totalExpense, balance } = useMemo(() => {
     const income = transactions
       .filter((t) => t.type === "income")
@@ -122,12 +113,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
               placeholder="Twój adres email"
             />
           </div>
-          <button
-            onClick={showAlertWithUserData}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200 mt-4"
-          >
-            Pokaż Moje Dane (Alert)
-          </button>
         </div>
       </div>
 
