@@ -1,14 +1,43 @@
-import { useMemo } from "react";
+// src/components/Dashboard.tsx
+import React, { useMemo, useState, useEffect } from "react"; // Dodano useState, useEffect
 import { Link } from "react-router-dom";
 import { Budget, Transaction } from "../utils/types";
 
-export const Dashboard = ({
-  transactions,
-  budgets,
-}: {
+interface DashboardProps {
   transactions: Transaction[];
   budgets: Budget[];
-}) => {
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
+  // Stan dla danych użytkownika (przechowywanych w localStorage)
+  const [userName, setUserName] = useState<string>(() => {
+    // Odczytaj z localStorage przy inicjalizacji
+    const savedName = localStorage.getItem("userName");
+    return savedName || "";
+  });
+  const [userEmail, setUserEmail] = useState<string>(() => {
+    const savedEmail = localStorage.getItem("userEmail");
+    return savedEmail || "";
+  });
+
+  // Efekt do zapisywania danych użytkownika do localStorage
+  useEffect(() => {
+    localStorage.setItem("userName", userName);
+  }, [userName]);
+
+  useEffect(() => {
+    localStorage.setItem("userEmail", userEmail);
+  }, [userEmail]);
+
+  // Funkcja do pokazywania alertu (możesz użyć `useToast` tutaj, ale prosiłeś o `alert`)
+  const showAlertWithUserData = () => {
+    if (userName && userEmail) {
+      alert(`Dane użytkownika:\nImię: ${userName}\nEmail: ${userEmail}`);
+    } else {
+      alert("Proszę najpierw uzupełnić dane użytkownika w formularzu!");
+    }
+  };
+
   const { totalIncome, totalExpense, balance } = useMemo(() => {
     const income = transactions
       .filter((t) => t.type === "income")
@@ -57,7 +86,53 @@ export const Dashboard = ({
     <div className="p-6 bg-white rounded-lg shadow-xl max-w-3xl mx-auto text-gray-800 space-y-6">
       <h2 className="text-2xl font-bold mb-6 text-center">Panel Główny</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+      {/* Sekcja Danych Użytkownika */}
+      <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+        <h3 className="text-xl font-bold mb-4">Twoje Dane</h3>
+        <div className="space-y-2">
+          <div>
+            <label
+              htmlFor="userName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Imię:
+            </label>
+            <input
+              type="text"
+              id="userName"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+              placeholder="Twoje imię"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="userEmail"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              id="userEmail"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+              placeholder="Twój adres email"
+            />
+          </div>
+          <button
+            onClick={showAlertWithUserData}
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200 mt-4"
+          >
+            Pokaż Moje Dane (Alert)
+          </button>
+        </div>
+      </div>
+
+      {/* Reszta Dashboardu (jak wcześniej) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-6">
         <div className="bg-blue-50 p-4 rounded-lg shadow">
           <p className="text-sm font-medium text-blue-600">
             Całkowity Przychód
@@ -91,7 +166,7 @@ export const Dashboard = ({
       {transactions.length > 0 && (
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4">
-            Największe wydatki według kategorii
+            Największe wydatki według kategorii (Top 3)
           </h3>
           {topExpenses.length > 0 ? (
             <ul className="space-y-2">
@@ -112,6 +187,7 @@ export const Dashboard = ({
           )}
         </div>
       )}
+
       {activeBudgets.length > 0 && (
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4">
@@ -167,3 +243,5 @@ export const Dashboard = ({
     </div>
   );
 };
+
+export default Dashboard;
