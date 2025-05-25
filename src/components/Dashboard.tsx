@@ -1,17 +1,15 @@
-// src/components/Dashboard.tsx
-import React, { useMemo, useState, useEffect } from "react"; // Dodano useState, useEffect
+import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Budget, Transaction } from "../utils/types";
 
-interface DashboardProps {
+export const Dashboard = ({
+  transactions,
+  budgets,
+}: {
   transactions: Transaction[];
   budgets: Budget[];
-}
-
-const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
-  // Stan dla danych użytkownika (przechowywanych w localStorage)
+}) => {
   const [userName, setUserName] = useState<string>(() => {
-    // Odczytaj z localStorage przy inicjalizacji
     const savedName = localStorage.getItem("userName");
     return savedName || "";
   });
@@ -20,7 +18,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
     return savedEmail || "";
   });
 
-  // Efekt do zapisywania danych użytkownika do localStorage
   useEffect(() => {
     localStorage.setItem("userName", userName);
   }, [userName]);
@@ -76,8 +73,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-xl max-w-3xl mx-auto text-gray-800 space-y-6">
       <h2 className="text-2xl font-bold mb-6 text-center">Panel Główny</h2>
-
-      {/* Sekcja Danych Użytkownika */}
       <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
         <h3 className="text-xl font-bold mb-4">Twoje Dane</h3>
         <div className="space-y-2">
@@ -115,8 +110,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
           </div>
         </div>
       </div>
-
-      {/* Reszta Dashboardu (jak wcześniej) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-6">
         <div className="bg-blue-50 p-4 rounded-lg shadow">
           <p className="text-sm font-medium text-blue-600">
@@ -147,7 +140,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
           </p>
         </div>
       </div>
-
       {transactions.length > 0 && (
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4">
@@ -216,7 +208,6 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
           </ul>
         </div>
       )}
-
       {transactions.length === 0 && budgets.length === 0 && (
         <div className="mt-8 text-center text-gray-600">
           <p>
@@ -228,5 +219,3 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
     </div>
   );
 };
-
-export default Dashboard;

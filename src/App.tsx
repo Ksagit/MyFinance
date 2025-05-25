@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useToast } from "./components/ToastContainer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Dashboard from "./components/Dashboard";
+import { Dashboard } from "./components/Dashboard";
 import { PWABadge } from "./components/PWABadge";
 import { BudgetsPage } from "./pages/BudgetsPage";
 import { Transaction, Budget } from "./utils/types";
