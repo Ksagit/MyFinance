@@ -1,2 +1,2 @@
 # MyFinance
-A PWA for financial managment built using Vite PWA.
+A PWA for financial management built using Vite PWA.
